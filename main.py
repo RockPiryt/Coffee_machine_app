@@ -1,3 +1,5 @@
+import pandas
+
 #COFFEE MACHINE
 resources = {
     "water": 1000,
@@ -34,6 +36,25 @@ MENU = {
     }
 }
 
+
+
+report = {
+    'type coffee': ['espresso', 'latte', 'cappuccino'],
+    'amount': [0, 0, 0],
+    'profit': [0, 0, 0],
+}
+
+
+def save_report():
+    '''Function generate csv file with report wit information about profit and amount of each type of coffee'''
+
+    # create DateFrame from dict
+    report_df = pandas.DataFrame(report)
+    print(report_df)
+    report_df.to_csv('report_data.cvs')
+
+
+
 #ingredients_user_coffee = user_drink["ingredients"]
 def make_coffee(ingredients_user_coffee, resources, choice):
 
@@ -49,6 +70,15 @@ def make_coffee(ingredients_user_coffee, resources, choice):
 
     print(f'Machine resources after making drink:{resources}')
     print(f'Here is your prepared drink ☕')
+    if choice == 'espresso':
+        report['amount'][0] += 1
+        report['profit'][0] += 1.5
+    elif choice == 'latte':
+        report['amount'][1] += 1
+        report['profit'][1] += 2.5
+    elif choice == 'cappuccino':
+        report['amount'][2] += 1
+        report['profit'][2] += 3
 
 
 
@@ -122,11 +152,14 @@ while turn_on is True:
     choice = input('What would you like? (espresso/latte/cappuccino): ')#latte
     if choice == 'off':
         turn_on = False
+    elif choice == 'resources':
+        print(f"Water = {resources['water']} ml")
+        print(f"Milk = {resources['milk']} ml")
+        print(f"Coffee = {resources['coffee']} g")
+        print(f"Money = {resources['money']} $")
     elif choice == 'report':
-        print(f"Water = {resources['Water']} ml")
-        print(f"Milk = {resources['Milk']} ml")
-        print(f"Coffee = {resources['Coffee']} g")
-        print(f"Money = {resources['Money']} $")
+        save_report()
+        print('Coffee information were generated in csv_file.')
     else:
         #eg.user choose latte - string 'latte' is used as key in menu dict
         user_drink = MENU[choice]#{'ingredients': {'water': 200, 'milk': 150, 'coffee': 24}, 'cost': 2.5}
